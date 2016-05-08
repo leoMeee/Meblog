@@ -5,8 +5,9 @@
  * @created_at    16/4/21 下午1:40
  */
 return [
+    'id' => $index + 1,
     'author' => $faker->name,
-    'content' => $faker->realText(200, 2),
+    'content' => $faker->randomElement(['支持!','威武!','好样的!','有希望了!']),
     'created_at' => $faker->unixTime,
-    'post_id' => 29,
+    'post_id' => $index + 1,
 ];
