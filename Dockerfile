@@ -9,6 +9,7 @@ COPY composer.json /var/www/html/
 COPY composer.lock /var/www/html/
 RUN composer config -g repo.packagist composer https://packagist.phpcomposer.com
 RUN composer self-update --no-progress && \
+    composer global update fxp/composer-asset-plugin --no-plugins && \
     composer install --no-progress
 
 # Copy the working dir to the image's web root

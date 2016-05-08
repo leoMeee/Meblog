@@ -1,0 +1,9 @@
+config/local.php
+config/console-local.php
+/docker-compose.yml
+/vendor/
+.env
+.idea/
+
+*.swp
+.vimrc
