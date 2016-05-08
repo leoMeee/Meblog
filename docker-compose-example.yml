@@ -1,0 +1,62 @@
+# For *-apache base image
+#web:
+#    build: ./
+#    ports:
+#        - "8080:80"
+#    expose:
+#        - "80"
+#    volumes:
+#        - ./:/var/www/html/
+#    links:
+#        - db
+#    environment:
+#        ENABLE_ENV_FILE: 1
+#        ENABLE_LOCALCONF: 1
+#        API_TOKEN: "<YOUR GITHUB API TOKEN>"
+
+    # Uncomment to autostart at boottime
+    #restart: always
+
+    # Uncomment to send log output to syslog
+    #log_driver: "syslog"
+    #log_opt:
+    #    tag: "docker-web"
+
+# for *-php-fpm and *-hhvm base image
+ app:
+    build: ./
+    expose:
+        - "9000"
+    volumes:
+        - ./:/var/www/html/
+    links:
+        - db
+    environment:
+        ENABLE_ENV_FILE: 1
+        ENABLE_LOCALCONF: 1
+        API_TOKEN: "<YOUR GITHUB API TOKEN>"
+
+ nginx:
+    build: ./Dockerfiles/nginx
+    ports:
+        - "80:80"
+    links:
+        - app
+    volumes_from:
+        - app
+
+ db:
+    build: ./Dockerfiles/mysql
+    ports:
+        - "3306:3306"
+    expose:
+        - "3306"
+    environment:
+        MYSQL_ROOT_PASSWORD: 123456
+        MYSQL_DATABASE: web
+        MYSQL_USER: web
+        MYSQL_PASSWORD: web
+
+    # Uncomment to autostart at boottime
+    #restart: always
+
