@@ -6,7 +6,7 @@ use yii\helpers\Html;
  * @var common\models\User $user
  */
 
-$confirmationLink = Yii::$app->urlManager->createAbsoluteUrl(['site/confirm-email', 'token' => $user->email_confirmation_token]);
+$confirmationLink = Yii::$app->urlManager->createAbsoluteUrl(['user/confirm-email', 'token' => $user->email_confirmation_token]);
 ?>
 
 Hello <?= Html::encode($user->username) ?>,

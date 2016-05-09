@@ -1,7 +1,7 @@
 {
-	"name": "codemix/yii2-dockerized",
-	"description": "A template for docker based Yii 2 applications",
-	"keywords": ["yii2", "framework", "docker", "application template"],
+	"name": "leo/Meblog",
+	"description": "A blog base yii2",
+	"keywords": ["yii2", "framework", "docker", "blog"],
 	"type": "project",
 	"license": "MIT",
 	"minimum-stability": "stable",
