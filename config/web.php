@@ -16,9 +16,6 @@ $config = [
             'password' => \DockerEnv::dbPassword(),
             'charset' => 'utf8',
             'tablePrefix' => '',
-            'schemaMap' => [
-                'mysql' => 'app\components\MysqlSchema',
-            ],
         ],
         'errorHandler' => [
             'errorAction' => 'site/error',
