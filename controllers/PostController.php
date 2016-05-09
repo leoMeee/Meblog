@@ -61,48 +61,7 @@ class PostController extends Controller
 
         return $this->render('show', compact('model'));
     }
-
-    /**
-     * 创建日志
-     */
-    public function actionCreate()
-    {
-        $model = new Post();
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['show', 'id' => $model->id]);
-        }
-
-        return $this->render('create', compact('model'));
-
-    }
-
-    /**
-     * 更新日志
-     * @param $id
-     * @return string
-     * @throws NotFoundHttpException
-     */
-    public function actionUpdate($id)
-    {
-        $model = $this->findModel($id);
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['show', 'id' => $model->id]);
-        }
-
-        return $this->render('update', compact('model'));
-    }
-
-
-    /**
-     * 删除日志
-     * @param $id
-     */
-    public function actionDelete($id)
-    {
-        $this->findModel($id)->delete();
-        $this->redirect(['index']);
-    }
+    
 
     private function findModel($id)
     {

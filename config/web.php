@@ -5,6 +5,12 @@ $config = [
     'vendorPath' => '/var/www/vendor',
     'language' => 'zh-CN',
     'timeZone' => 'Asia/ShangHai',
+    'defaultRoute' => 'post/index',
+    'modules' => [
+        'backend' => [
+            'class' => 'app\modules\backend\Module',
+        ]
+    ],
     'components' => [
         'cache' => [
             'class' => 'yii\caching\ApcCache',
