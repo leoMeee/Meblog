@@ -18,12 +18,16 @@ class AppAsset extends AssetBundle
     public $basePath = '@webroot';
     public $baseUrl = '@web';
     public $css = [
-        'css/site.css',
+        'css/clean-blog.css',
     ];
+
     public $js = [
+        'js/clean-blog.js',
     ];
+
     public $depends = [
-        'yii\web\YiiAsset',
-        'yii\bootstrap\BootstrapAsset',
+        'yii\web\JqueryAsset',
+        'app\assets\BootstrapAsset',
+        'app\assets\SemanticUI\ImageAsset',
     ];
 }

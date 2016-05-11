@@ -2,73 +2,94 @@
 use yii\helpers\Html;
 use yii\bootstrap\Nav;
 use yii\bootstrap\NavBar;
-use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
-use app\widgets\Alert;
 
 /* @var \yii\web\View $this */
 /* @var string $content */
 
 AppAsset::register($this);
+$this->params['backgroundImage'] = isset($this->params['backgroundImage']) ? $this->params['backgroundImage'] : "/img/about-bg.jpg";
+
 ?>
 <?php $this->beginPage() ?>
 <!DOCTYPE html>
 <html lang="<?= Yii::$app->language ?>">
 <head>
     <meta charset="<?= Yii::$app->charset ?>"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
     <?= Html::csrfMetaTags() ?>
-    <title><?= Html::encode($this->title) ?></title>
+    <title><?= isset($this->title) ? Html::encode($this->title) : Yii::$app->params['website.name'] ?></title>
     <?php $this->head() ?>
 </head>
 <body>
-    <?php $this->beginBody() ?>
-    <div class="wrap">
-        <?php
-            NavBar::begin([
-                'brandLabel' => Yii::$app->params['website.name'],
-                'brandUrl' => Yii::$app->homeUrl,
-                'options' => [
-                    'class' => 'navbar-inverse navbar-fixed-top',
-                ],
-            ]);
-            $menuItems = [
-                ['label' => '日志', 'url' => ['/post/index']],
-            ];
-            if (Yii::$app->user->isGuest) {
-                $menuItems[] = ['label' => '注册', 'url' => ['/user/signup']];
-                $menuItems[] = ['label' => '登录', 'url' => ['/user/login']];
-            } else {
-                $menuItems[] = [
-                    'label' => 'Logout (' . Yii::$app->user->identity->username . ')',
-                    'url' => ['/user/logout'],
-                    'linkOptions' => ['data-method' => 'post']
-                ];
-            }
-            echo Nav::widget([
-                'options' => ['class' => 'navbar-nav navbar-right'],
-                'items' => $menuItems,
-            ]);
-            NavBar::end();
-        ?>
+<?php $this->beginBody() ?>
+<!-- Navigation -->
+<?php
+NavBar::begin(
+    [
+        'innerContainerOptions' => ['class' => 'container-fluid'],
+        'brandLabel' => Yii::$app->params['website.name'],
+        'brandUrl' => Yii::$app->homeUrl,
+        'options' => [
+            'class' => 'navbar-default navbar-custom navbar-fixed-top',
+        ],
+    ]
+);
+$menuItems = [
+    ['label' => '主页', 'url' => ['/']],
+    ['label' => '归档', 'url' => ['/']],
+];
+echo Nav::widget(
+    [
+        'options' => ['class' => 'navbar-nav navbar-right'],
+        'items' => $menuItems,
+    ]
+);
+NavBar::end();
+?>
 
-        <div class="container">
-        <?= Breadcrumbs::widget([
-            'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
-        ]) ?>
-        <?= Alert::widget() ?>
-        <?= $content ?>
+<!-- Page Header -->
+<header class="intro-header" style="background-image: url('<?= $this->params['backgroundImage'] ?>')">
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <?php if (isset($this->blocks['heading'])): ?>
+                    <?= $this->blocks['heading'] ?>
+                <?php else: ?>
+                    <div class="site-heading">
+                        <div class="ui small sequenced images">
+                            <img src="/img/elyse.png" class="ui circular image">
+                        </div>
+                        <span class="subheading">Fear cuts deeper than swords.</span>
+                    </div>
+                <?php endif; ?>
+            </div>
         </div>
     </div>
+</header>
 
-    <footer class="footer">
-        <div class="container">
-        <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
-        <p class="pull-right"><?= Yii::powered() ?></p>
+<!-- Main Content -->
+<div class="container">
+    <?= $content ?>
+</div>
+
+<hr>
+<!-- Footer -->
+<footer>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
+                <p class="copyright text-muted">Copyright &copy;
+                    <?= Yii::$app->params['website.name'] ?> <?= date('Y') ?></p>
+            </div>
         </div>
-    </footer>
+    </div>
+</footer>
 
-    <?php $this->endBody() ?>
+<?php $this->endBody() ?>
 </body>
 </html>
 <?php $this->endPage() ?>
