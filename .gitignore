@@ -4,6 +4,7 @@ config/console-local.php
 /vendor/
 .env
 .idea/
+node_modules
 
 *.swp
 .vimrc

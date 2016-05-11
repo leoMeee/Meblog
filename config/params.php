@@ -3,7 +3,7 @@
  * Application parameters
  */
 return [
-    'website.name'=>'leo\'s blog'  ,
+    'website.name'=>'Leo\'s 博客'  ,
     'support.email' => 'webmaster@example.com',
     'support.name' => 'My Support',
 

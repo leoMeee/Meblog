@@ -1,38 +1,32 @@
 <?php
 use yii\helpers\Html;
-use yii\helpers\Url;
-use app\widgets\Tag;
-use app\widgets\Comment;
 use yii\helpers\Markdown;
+use app\assets\MarkDownAsset;
 
 $this->title = Html::encode($model->title);
-$this->params['breadcrumbs'][] = ['label' => '日志列表', 'url' => ['index']];
-$this->params['breadcrumbs'][] = $this->title;
+$this->params['subTitle'] = $this->title;
+$this->params['backgroundImage'] = "/img/post-bg.jpg";
+MarkDownAsset::register($this);
+$this->registerJs("hljs.initHighlightingOnLoad();")
 ?>
-<div class="row">
-    <div class="col-md-12">
-        <div class="panel panel-info">
-            <div class="panel-heading">
-                <?= Html::encode($model->title) ?>
-                <?php if (!Yii::$app->user->isGuest): ?>
-                    <div class="pull-right">
-                        <a href="<?= Url::to(['update', 'id' => $model->id]) ?>" class="btn-sm"><span
-                                class="glyphicon glyphicon-edit"></span> 编辑</a>
-                        <a href="<?= Url::to(['delete', 'id' => $model->id]) ?>" class="btn-sm"><span
-                                class="glyphicon glyphicon-trash"></span> 删除</a>
-                    </div>
-                <?php endif; ?>
-            </div>
-            <div class="panel-body">
-                <?= Markdown::process($model->content) ?>
-            </div>
-            <div class="panel-footer">
-                <span class="pull-right">更新于 <?= date('m/d H:i:s', $model->updated_at) ?></span>
-                <span><span class="glyphicon glyphicon-user"></span> <?= $model->author->username ?></span>
-                <?= Tag::widget(['tags' => $model->tags]) ?>
+
+<?php $this->beginBlock('heading'); ?>
+<div class="post-heading">
+    <h2 class="subheading"><?= $model->title ?></h2>
+    <span class="meta">更新于 <?= date('Y年m月d日 H:i:s', $model->updated_at) ?></span>
+</div>
+<?php $this->endBlock(); ?>
+
+<article class="markdown-body">
+    <div class="row">
+        <div class="col-md-10 col-md-offset-1">
+            <div class="panel panel-default">
+                <div class="panel-body">
+                    <?= Markdown::process($model->content) ?>
+                </div>
             </div>
         </div>
     </div>
-    <?= Comment::widget(['post_id' => $model->id]) ?>
-</div>
+</article>
+
 
