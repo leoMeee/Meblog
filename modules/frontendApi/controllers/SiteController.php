@@ -8,8 +8,6 @@ use yii\web\Controller;
 class SiteController extends Controller
 {
 
-    public $layout = false;
-
     /**
      * @inheritdoc
      */
@@ -20,12 +18,6 @@ class SiteController extends Controller
                 'class' => 'yii\web\ErrorAction',
             ],
         ];
-    }
-
-
-    public function actionIndex()
-    {
-        return $this->render('index');
     }
 
 

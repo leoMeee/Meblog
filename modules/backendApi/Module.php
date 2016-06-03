@@ -4,7 +4,7 @@ namespace app\modules\backend;
 
 class Module extends \yii\base\Module
 {
-    public $controllerNamespace = 'app\modules\backend\controllers';
+    public $controllerNamespace = 'app\modules\backendApi\controllers';
 
     public function init()
     {

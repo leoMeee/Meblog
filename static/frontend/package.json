@@ -1,0 +1,25 @@
+{
+  "name": "@leo_in_china/frontend",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "build": "webpack --display-error-detail -p",
+    "watch": "webpack --display-error-details -w"
+  },
+  "keywords": [],
+  "author": "leo",
+  "license": "ISC",
+  "dependencies": {
+    "jquery": "^2.2.4",
+    "react": "^15.1.0",
+    "react-dom": "^15.1.0"
+  },
+  "devDependencies": {
+    "babel-core": "^6.9.1",
+    "babel-loader": "^6.2.4",
+    "babel-preset-es2015": "^6.9.0",
+    "babel-preset-react": "^6.5.0",
+    "webpack": "^1.13.1"
+  }
+}
