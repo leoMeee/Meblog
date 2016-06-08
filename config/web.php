@@ -9,6 +9,9 @@ $config = [
     'modules' => [
         'backendApi' => [
             'class' => 'app\modules\backendApi\Module',
+        ],
+        'frontendApi' => [
+            'class' => 'app\modules\frontendApi\Module',
         ]
     ],
     'components' => [
@@ -58,6 +61,16 @@ $config = [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
+            'rules' => [
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => [
+                        'frontendApi/post',
+                        'frontendApi/nav',
+                        'frontendApi/banner',
+                    ],
+                ],
+            ],
         ],
         'user' => [
             'identityClass' => 'app\models\User',

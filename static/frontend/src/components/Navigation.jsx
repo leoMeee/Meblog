@@ -3,8 +3,8 @@ import React from 'react';
 class Navigation extends React.Component {
 
     render() {
-        let menusNode = this.props.menus.map(function (menu) {
-            return <Menu {...menu} />
+        let menusNode = this.props.menus.map(function (menu, key) {
+            return <Menu {...menu}  />
         });
         return (
             <nav className="navbar navbar-default navbar-custom navbar-fixed-top">
@@ -17,7 +17,7 @@ class Navigation extends React.Component {
                             <span className="icon-bar">&nbsp;</span>
                             <span className="icon-bar">&nbsp;</span>
                         </button>
-                        <a className="navbar-brand" href="/" title="Home">{this.props.name}</a>
+                        <a className="navbar-brand" href="/" title="Home">{this.props.siteName}</a>
                     </div>
 
                     <div className="collapse navbar-collapse" id="bs-example-navbar-collapse-1">

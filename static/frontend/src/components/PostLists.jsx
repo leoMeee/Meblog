@@ -2,7 +2,7 @@ import React from 'react';
 import PostItem from './PostItem';
 
 class PostLists extends React.Component {
-
+    
     render() {
         let itemNodes = this.props.posts.map(function (post) {
             return (
