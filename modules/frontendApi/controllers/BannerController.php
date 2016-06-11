@@ -14,7 +14,7 @@ class BannerController extends Controller
             'user' => [
                 'name' => 'leo',
                 'avatar' => '/img/elyse.png',
-                'say' => 'Winner Is Coming',
+                'say' => 'Winner is Coming',
             ],
         ];
 

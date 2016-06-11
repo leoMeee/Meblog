@@ -2,11 +2,11 @@ import React from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from  'react-redux';
 import Navigation from './../components/Navigation';
-import Loading from './../components/Loading';
 import Banner from './../components/Banner';
 import PostLists from './../components/PostLists';
 import Footer from  './../components/Footer';
 import * as Actions from '../actions'
+import Loading from '../components/Loading';
 
 class Home extends React.Component {
     componentWillMount() {
@@ -18,9 +18,11 @@ class Home extends React.Component {
 
     render() {
         const {nav, banner, posts, load} = this.props;
-        if (load.progress == 100) {
-            return (
-                <div className="main">
+        let mainClass = 'main '+load.styles.mainStyle;
+        return (
+            <div>
+                <Loading style={load.styles.loadStyle}/>
+                <div className={mainClass} >
                     <Navigation {...nav} />
                     <Banner {...banner} />
                     <div className="container">
@@ -29,13 +31,8 @@ class Home extends React.Component {
                     <hr/>
                     <Footer {...nav}/>
                 </div>
-            )
-        } else {
-            return (
-                <Loading />
-            )
-        }
-
+            </div>
+        )
     }
 
 }

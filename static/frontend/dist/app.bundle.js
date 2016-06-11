@@ -30999,6 +30999,7 @@
 	var RECEIVE_NAV = exports.RECEIVE_NAV = 'RECEIVE_NAV';
 	var RECEIVE_BANNER = exports.RECEIVE_BANNER = 'RECEIVE_BANNER';
 	var INCREASE_LOAD_PROGRESS = exports.INCREASE_LOAD_PROGRESS = 'INCREASE_LOAD_PROGRESS';
+	var LOAD_DONE = exports.LOAD_DONE = 'LOAD_DONE';
 
 /***/ },
 /* 492 */
@@ -31079,8 +31080,14 @@
 
 	var _ActionTypes = __webpack_require__(491);
 
+	var _actions = __webpack_require__(502);
+
 	var initialState = {
-	    progress: 0
+	    progress: 0,
+	    styles: {
+	        loadStyle: 'fadein',
+	        mainStyle: 'hide'
+	    }
 	};
 
 	function load() {
@@ -31090,8 +31097,10 @@
 	    switch (action.type) {
 	        case _ActionTypes.INCREASE_LOAD_PROGRESS:
 	            var progress = state.progress + parseInt(action.progress);
-	            progress = progress >= 100 ? 100 : progress;
-	            return Object.assign({}, state, { progress: progress });;
+	            return Object.assign({}, state, { progress: progress });
+	            break;
+	        case _ActionTypes.LOAD_DONE:
+	            return Object.assign({}, state, { styles: action.styles });
 	            break;
 	        default:
 	            return state;
@@ -31122,10 +31131,6 @@
 
 	var _Navigation2 = _interopRequireDefault(_Navigation);
 
-	var _Loading = __webpack_require__(506);
-
-	var _Loading2 = _interopRequireDefault(_Loading);
-
 	var _Banner = __webpack_require__(497);
 
 	var _Banner2 = _interopRequireDefault(_Banner);
@@ -31141,6 +31146,10 @@
 	var _actions = __webpack_require__(502);
 
 	var Actions = _interopRequireWildcard(_actions);
+
+	var _Loading = __webpack_require__(506);
+
+	var _Loading2 = _interopRequireDefault(_Loading);
 
 	function _interopRequireWildcard(obj) { if (obj && obj.__esModule) { return obj; } else { var newObj = {}; if (obj != null) { for (var key in obj) { if (Object.prototype.hasOwnProperty.call(obj, key)) newObj[key] = obj[key]; } } newObj.default = obj; return newObj; } }
 
@@ -31185,10 +31194,14 @@
 	            var posts = _props.posts;
 	            var load = _props.load;
 
-	            if (load.progress == 100) {
-	                return _react2.default.createElement(
+	            var mainClass = 'main ' + load.styles.mainStyle;
+	            return _react2.default.createElement(
+	                'div',
+	                null,
+	                _react2.default.createElement(_Loading2.default, { style: load.styles.loadStyle }),
+	                _react2.default.createElement(
 	                    'div',
-	                    { className: 'main' },
+	                    { className: mainClass },
 	                    _react2.default.createElement(_Navigation2.default, nav),
 	                    _react2.default.createElement(_Banner2.default, banner),
 	                    _react2.default.createElement(
@@ -31198,10 +31211,8 @@
 	                    ),
 	                    _react2.default.createElement('hr', null),
 	                    _react2.default.createElement(_Footer2.default, nav)
-	                );
-	            } else {
-	                return _react2.default.createElement(_Loading2.default, null);
-	            }
+	                )
+	            );
 	        }
 	    }]);
 
@@ -31679,6 +31690,7 @@
 	exports.fetchNav = fetchNav;
 	exports.fetchBanner = fetchBanner;
 	exports.loadProgress = loadProgress;
+	exports.loadDone = loadDone;
 
 	var _isomorphicFetch = __webpack_require__(503);
 
@@ -31760,9 +31772,33 @@
 	}
 
 	function loadProgress(progress) {
-	    return {
-	        type: actionType.INCREASE_LOAD_PROGRESS,
-	        progress: progress
+	    return function (dispatch, getState) {
+	        dispatch({
+	            type: actionType.INCREASE_LOAD_PROGRESS,
+	            progress: progress
+	        });
+	        if (getState().load.progress >= 100) dispatch(loadDone());
+	    };
+	}
+
+	function loadDone() {
+	    return function (dispatch) {
+	        dispatch({
+	            type: actionType.LOAD_DONE,
+	            styles: {
+	                mainStyle: 'show',
+	                loadStyle: 'fadeout'
+	            }
+	        });
+	        setTimeout(function () {
+	            dispatch({
+	                type: actionType.LOAD_DONE,
+	                styles: {
+	                    loadStyle: 'hide',
+	                    mainStyle: 'show'
+	                }
+	            });
+	        }, 1000);
 	    };
 	}
 
@@ -32243,7 +32279,7 @@
 /* 506 */
 /***/ function(module, exports, __webpack_require__) {
 
-	"use strict";
+	'use strict';
 
 	Object.defineProperty(exports, "__esModule", {
 	    value: true
@@ -32273,16 +32309,17 @@
 	    }
 
 	    _createClass(Loading, [{
-	        key: "render",
+	        key: 'render',
 	        value: function render() {
+	            var loadClass = 'loading ' + this.props.style;
 	            return _react2.default.createElement(
-	                "div",
-	                { className: "loading" },
+	                'div',
+	                { className: loadClass },
 	                _react2.default.createElement(
-	                    "div",
-	                    { className: "spinner" },
-	                    _react2.default.createElement("div", { className: "double-bounce1" }),
-	                    _react2.default.createElement("div", { className: "double-bounce2" })
+	                    'div',
+	                    { className: 'spinner' },
+	                    _react2.default.createElement('div', { className: 'double-bounce1' }),
+	                    _react2.default.createElement('div', { className: 'double-bounce2' })
 	                )
 	            );
 	        }

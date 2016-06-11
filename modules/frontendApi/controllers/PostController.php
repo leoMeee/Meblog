@@ -27,7 +27,6 @@ class PostController extends Controller
                 'created_at' => time(),
             ],
         ];
-        
         return $posts;
     }
 
