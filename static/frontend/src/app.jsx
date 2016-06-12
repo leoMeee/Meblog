@@ -5,13 +5,14 @@ import ReactDOM from  'react-dom';
 import {Provider} from 'react-redux';
 import {createStore, applyMiddleware} from 'redux';
 import rootReducer from  './reducers';
-import Home from './containers/Home';
+import {Router, hashHistory} from 'react-router';
+import routes from './routes';
 
 var store = createStore(rootReducer, {}, applyMiddleware(thunk));
 
 ReactDOM.render(
     <Provider store={store}>
-        <Home />
+        <Router routes={routes} history={hashHistory}/>
     </Provider>,
     document.querySelector('#main')
 );

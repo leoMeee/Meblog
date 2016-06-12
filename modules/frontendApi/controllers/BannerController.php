@@ -10,7 +10,7 @@ class BannerController extends Controller
     public function actionIndex()
     {
         $return = [
-            'img' => '/img/contact-bg.jpg',
+            'img' => '/img/about-bg.jpg',
             'user' => [
                 'name' => 'leo',
                 'avatar' => '/img/elyse.png',

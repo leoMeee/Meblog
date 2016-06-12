@@ -1,35 +1,28 @@
 import React from 'react';
 import {bindActionCreators} from 'redux';
 import {connect} from  'react-redux';
-import Navigation from './../components/Navigation';
-import Banner from './../components/Banner';
-import PostLists from './../components/PostLists';
-import Footer from  './../components/Footer';
+import Banner from './../components/common/Banner';
+import BannerContent from '../components/home/BannerContent';
+import PostLists from './../components/home/PostLists';
 import * as Actions from '../actions'
-import Loading from '../components/Loading';
+
 
 class Home extends React.Component {
     componentWillMount() {
         const {actions} = this.props;
-        actions.fetchNav().then(()=>actions.loadProgress(20));
         actions.fetchBanner().then(()=>actions.loadProgress(40));
         actions.fetchPosts().then(()=>actions.loadProgress(40));
     }
 
     render() {
-        const {nav, banner, posts, load} = this.props;
-        let mainClass = 'main '+load.styles.mainStyle;
+        const {banner, posts} = this.props;
         return (
             <div>
-                <Loading style={load.styles.loadStyle}/>
-                <div className={mainClass} >
-                    <Navigation {...nav} />
-                    <Banner {...banner} />
-                    <div className="container">
-                        <PostLists posts={posts}/>
-                    </div>
-                    <hr/>
-                    <Footer {...nav}/>
+                <Banner {...banner}>
+                    <BannerContent {...banner.user} />
+                </Banner>
+                <div className="container">
+                    <PostLists posts={posts}/>
                 </div>
             </div>
         )
@@ -39,10 +32,8 @@ class Home extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        nav: state.nav,
         banner: state.banner,
         posts: state.posts,
-        load: state.load
     }
 }
 

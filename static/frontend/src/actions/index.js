@@ -23,6 +23,13 @@ function receiveBanner(banner) {
     }
 }
 
+function receiveArticle(article) {
+    return {
+        type: actionType.RECEIVE_ARTICLE,
+        article
+    }
+}
+
 
 export function fetchPosts() {
     return dispatch=> {
@@ -45,6 +52,14 @@ export function fetchBanner() {
         return fetch(Api.BANNER)
             .then(response => response.json())
             .then(json=>dispatch(receiveBanner(json)))
+    }
+}
+
+export function fetchArticle(id) {
+    return dispatch=> {
+        return fetch(Api.ARTICLE+'/'+id)
+            .then(response => response.json())
+            .then(json=>dispatch(receiveArticle(json)))
     }
 }
 
@@ -75,7 +90,7 @@ export function loadDone() {
                     mainStyle: 'show'
                 }
             })
-        }, 1000)
+        }, 600)
     };
 
 }

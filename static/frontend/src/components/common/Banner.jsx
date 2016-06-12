@@ -1,5 +1,4 @@
 import React from 'react';
-import BannerContent from './../components/BannerContent';
 
 class Banner extends React.Component {
     render() {
@@ -9,7 +8,7 @@ class Banner extends React.Component {
                 <div className="container">
                     <div className="row">
                         <div className="col-lg-8 col-lg-offset-2 col-md-10 col-md-offset-1">
-                            <BannerContent {...this.props.user}/>
+                            {this.props.children}
                         </div>
                     </div>
                 </div>
