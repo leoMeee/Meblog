@@ -1,5 +1,6 @@
 import React from 'react';
 import {Link} from 'react-router';
+import DateFormatter from '../../libs/DateFormatter';
 
 class PostItem extends React.Component {
 
@@ -12,7 +13,7 @@ class PostItem extends React.Component {
                         {this.props.title}
                     </h2>
                 </Link>
-                <p className="post-meta">发布于 {this.props.created_at}</p>
+                <p className="post-meta">发布于 { DateFormatter(this.props.created_at) }</p>
             </div>
         )
     }

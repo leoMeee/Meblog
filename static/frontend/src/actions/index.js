@@ -57,7 +57,7 @@ export function fetchBanner() {
 
 export function fetchArticle(id) {
     return dispatch=> {
-        return fetch(Api.ARTICLE+'/'+id)
+        return fetch(Api.POST+'/'+id)
             .then(response => response.json())
             .then(json=>dispatch(receiveArticle(json)))
     }
