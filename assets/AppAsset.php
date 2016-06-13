@@ -21,10 +21,6 @@ class AppAsset extends AssetBundle
         'app.bundle.js',
     ];
 
-    public $css = [
-        'css/clean-blog.css',
-    ];
-
     public $depends = [
         'app\assets\BootstrapAsset',
         'app\assets\SemanticUI\ImageAsset',

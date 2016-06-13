@@ -65,6 +65,7 @@ export function fetchArticle(id) {
 
 export function loadProgress(progress) {
     return (dispatch, getState)=> {
+        if (getState().load.progress >= 100) return true;
         dispatch({
             type: actionType.INCREASE_LOAD_PROGRESS,
             progress: progress
