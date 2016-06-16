@@ -1,10 +1,11 @@
 import React, {PropTypes} from 'react';
 import PostItem from './PostItem';
+import  smoothScroll from 'smoothscroll';
 
 class PostLists extends React.Component {
 
     render() {
-        let itemNodes = this.props.posts.items.map(function (post) {
+        let itemNodes = this.props.posts.map(function (post) {
             return (
                 <PostItem {...post} />
             )
@@ -16,6 +17,12 @@ class PostLists extends React.Component {
                 </div>
             </div>
         )
+    }
+
+    componentDidUpdate(prevProps) {
+        if (prevProps.posts.length > 0 && this.props.posts.length > 0) {
+            smoothScroll(document.querySelector('.container'));
+        }
     }
 }
 

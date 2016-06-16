@@ -5,8 +5,8 @@ import Home from './containers/Home/Home';
 import View from './containers/View/View';
 
 export default(
-    <Route path="/" component={App}>
-        <IndexRoute component={Home}/>
+    <Route path="/(:page)" component={App}>
+        <IndexRoute  component={Home}/>
         <Route path="/view/:id" component={View}/>
     </Route>
 )

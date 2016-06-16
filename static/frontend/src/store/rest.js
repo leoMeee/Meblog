@@ -2,7 +2,6 @@ import "isomorphic-fetch";
 import reduxApi, {transformers} from "redux-api";
 import adapterFetch from "redux-api/lib/adapters/fetch";
 
-const paging = {_link: {}, _meta: {}, items: []};
 
 const rest = reduxApi({
     app: {
@@ -16,7 +15,11 @@ const rest = reduxApi({
     posts: {
         url: 'posts',
         reducer(state, action) {
-            initState(state, paging);
+            initState(state, {
+                _link: {},
+                _meta: {},
+                items: []
+            });
             return state;
         }
     },

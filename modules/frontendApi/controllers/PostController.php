@@ -12,6 +12,7 @@ class PostController extends RestController
 
     public function actionIndex()
     {
+        sleep(2);
         return new ActiveDataProvider(
             [
                 'query' => Post::find(),
