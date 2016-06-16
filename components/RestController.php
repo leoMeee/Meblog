@@ -14,10 +14,10 @@ class RestController extends Controller
     public function behaviors()
     {
         $behaviors = parent::behaviors();
-        $behaviors['authenticator'] = [
-            'class' => QueryParamAuth::className(),
-            'optional' => $this->optional(),
-        ];
+//        $behaviors['authenticator'] = [
+//            'class' => QueryParamAuth::className(),
+//            'optional' => $this->optional(),
+//        ];
 
         return $behaviors;
     }

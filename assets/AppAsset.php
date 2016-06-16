@@ -20,9 +20,5 @@ class AppAsset extends AssetBundle
     public $js = [
         'app.bundle.js',
     ];
-
-    public $depends = [
-        'app\assets\BootstrapAsset',
-        'app\assets\SemanticUI\ImageAsset',
-    ];
+    
 }

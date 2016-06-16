@@ -1,10 +1,10 @@
-import React from 'react';
+import React, {PropTypes} from 'react';
 import PostItem from './PostItem';
 
 class PostLists extends React.Component {
-    
+
     render() {
-        let itemNodes = this.props.posts.map(function (post) {
+        let itemNodes = this.props.posts.items.map(function (post) {
             return (
                 <PostItem {...post} />
             )
@@ -18,4 +18,5 @@ class PostLists extends React.Component {
         )
     }
 }
+
 export default PostLists;

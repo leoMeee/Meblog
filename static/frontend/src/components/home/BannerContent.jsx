@@ -1,4 +1,5 @@
 import React from 'react';
+import 'semantic-ui/dist/components/image.min.css'
 
 class BannerContent extends React.Component {
 

@@ -5,24 +5,25 @@ import Banner from './../../components/common/Banner';
 import {bindActionCreators} from 'redux';
 import {connect} from  'react-redux';
 import * as Actions from '../../actions'
+import rest from "../../store/rest";
 
 class View extends React.Component {
 
     constructor(props) {
         super(props);
-        const {actions} = props;
-        actions.fetchArticle(this.props.params.id).then(()=>actions.loadProgress(80));
+        const {actions, dispatch} = props;
+        dispatch(actions.post.get({id:this.props.params.id},()=>dispatch(actions.loadProgress(80))));
     }
 
     render() {
-        const {article} = this.props;
+        const {post} = this.props;
         return (
             <div>
                 <Banner img="/img/post-bg.jpg">
-                    <ArticleHeader {...article}/>
+                    <ArticleHeader {...post.data}/>
                 </Banner>
                 <div className="container">
-                    <Article {...article}/>
+                    <Article {...post.data}/>
                 </div>
             </div>
         )
@@ -31,13 +32,14 @@ class View extends React.Component {
 
 function mapStateToProps(state) {
     return {
-        article: state.article
+        post: state.post
     }
 }
 
 function mapDispatchToProps(dispatch) {
     return {
-        actions: bindActionCreators(Actions, dispatch)
+        dispatch: dispatch,
+        actions: Object.assign({}, Actions, rest.actions)
     }
 }
 
