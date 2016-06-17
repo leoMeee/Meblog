@@ -11,33 +11,31 @@ import rest from "../../store/rest";
 
 class Home extends React.Component {
 
+
     constructor(props) {
         super(props);
         let {dispatch} = this.props;
+        dispatch(rest.actions.banner.sync()).then(()=>dispatch(Actions.loadProgress(40)));
         let page = this.props.params.page || 1;
-        dispatch(rest.actions.banner.sync()).then(dispatch(Actions.loadProgress(40)));
         dispatch(rest.actions.posts.sync({
             page: page,
             fields: 'id,title,created_at'
-        })).then(dispatch(Actions.loadProgress(40)));
+        })).then(()=>dispatch(Actions.loadProgress(40)));
     }
 
-    shouldComponentUpdate(props) {
-        if (props.params.page && props.params.page != this.props.params.page) {
-            let {dispatch} = props;
-            dispatch(rest.actions.posts.reset('sync'));
-            dispatch(rest.actions.posts.sync({
-                page: props.params.page,
-                fields: 'id,title,created_at'
-            }))
-        }
-        return this.props.posts !== props.posts;
+    _handlePage(page) {
+        const {dispatch} = this.props;
+        dispatch(rest.actions.posts.reset('sync'));
+        return dispatch(rest.actions.posts.sync({
+            page: page,
+            fields: 'id,title,created_at'
+        }))
     }
 
     render() {
-        const {banner, posts} = this.props;
+        const {banner, posts, dispatch} = this.props;
         let _meta = posts.data._meta;
-        let pager = _meta.pageCount > 1 ? <Pager {..._meta}/> : '';
+        let pager = _meta.pageCount > 1 ? <Pager {..._meta} dispatch={dispatch} handleClick={this._handlePage}/> : '';
 
         return (
             <div>
@@ -52,7 +50,15 @@ class Home extends React.Component {
         )
     }
 
+    componentWillUnmount() {
+        const {dispatch} = this.props;
+        dispatch(rest.actions.posts.reset('sync'));
+        dispatch(rest.actions.banner.reset('sync'));
+    }
+
+
 }
+
 
 function mapStateToProps(state) {
     return {

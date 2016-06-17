@@ -15,8 +15,8 @@ class App extends React.Component {
 
     constructor(props) {
         super(props);
-        const {actions, dispatch} = props;
-        dispatch(actions.app.sync(()=>dispatch(actions.loadProgress(20))));
+        const {dispatch} = props;
+        dispatch(rest.actions.app.sync()).then(()=>dispatch(Actions.loadProgress(20)));
     }
 
     render() {
@@ -45,13 +45,6 @@ function mapStateToProps(state) {
     }
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        dispatch: dispatch,
-        actions: Object.assign({}, Actions, rest.actions)
-    }
-}
-
-App = connect(mapStateToProps, mapDispatchToProps)(App);
+App = connect(mapStateToProps)(App);
 
 export default App;

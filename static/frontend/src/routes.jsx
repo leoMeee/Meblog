@@ -6,7 +6,7 @@ import View from './containers/View/View';
 
 export default(
     <Route path="/(:page)" component={App}>
-        <IndexRoute  component={Home}/>
+        <IndexRoute  component={Home} ignoreScrollBehavior/>
         <Route path="/view/:id" component={View}/>
     </Route>
 )

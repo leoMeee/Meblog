@@ -6,13 +6,18 @@ import {bindActionCreators} from 'redux';
 import {connect} from  'react-redux';
 import * as Actions from '../../actions'
 import rest from "../../store/rest";
+import 'nprogress/nprogress.css';
 
 class View extends React.Component {
 
     constructor(props) {
         super(props);
-        const {actions, dispatch} = props;
-        dispatch(actions.post.get({id:this.props.params.id},()=>dispatch(actions.loadProgress(80))));
+        const {dispatch} = props;
+        dispatch(rest.actions.post.get({id: this.props.params.id}, ()=>dispatch(Actions.loadProgress(80))));
+    }
+
+    shouldComponentUpdate(nextProps, nextState) {
+       return nextProps.post.sync;
     }
 
     render() {
@@ -28,6 +33,12 @@ class View extends React.Component {
             </div>
         )
     }
+    
+    componentWillUnmount() {
+        const {dispatch} = this.props;
+        dispatch(rest.actions.post.reset('sync'));
+    }
+
 }
 
 function mapStateToProps(state) {
@@ -36,13 +47,7 @@ function mapStateToProps(state) {
     }
 }
 
-function mapDispatchToProps(dispatch) {
-    return {
-        dispatch: dispatch,
-        actions: Object.assign({}, Actions, rest.actions)
-    }
-}
 
-View = connect(mapStateToProps, mapDispatchToProps)(View);
+View = connect(mapStateToProps)(View);
 
 export default View;
