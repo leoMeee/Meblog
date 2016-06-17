@@ -1,0 +1,4 @@
+export const INCREASE_LOAD_PROGRESS = 'INCREASE_LOAD_PROGRESS';
+export const LOAD_DONE = 'LOAD_DONE';
+
+

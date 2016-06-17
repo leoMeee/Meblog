@@ -8,5 +8,9 @@ class BootstrapAsset extends YiiBootstrapAsset
     public $js = [
         'js/bootstrap.js',
     ];
+
+    public $depends = [
+        'yii\web\JqueryAsset',
+    ];
 }
 

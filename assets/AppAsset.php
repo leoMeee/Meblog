@@ -15,19 +15,10 @@ use yii\web\AssetBundle;
  */
 class AppAsset extends AssetBundle
 {
-    public $basePath = '@webroot';
-    public $baseUrl = '@web';
-    public $css = [
-        'css/clean-blog.css',
-    ];
+    public $sourcePath = "@app/static/frontend/dist";
 
     public $js = [
-        'js/clean-blog.js',
+        'app.bundle.js',
     ];
-
-    public $depends = [
-        'yii\web\JqueryAsset',
-        'app\assets\BootstrapAsset',
-        'app\assets\SemanticUI\ImageAsset',
-    ];
+    
 }

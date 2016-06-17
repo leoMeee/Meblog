@@ -5,10 +5,13 @@ $config = [
     'vendorPath' => '/var/www/vendor',
     'language' => 'zh-CN',
     'timeZone' => 'Asia/ShangHai',
-    'defaultRoute' => 'post/index',
+    'defaultRoute' => 'site/index',
     'modules' => [
-        'backend' => [
-            'class' => 'app\modules\backend\Module',
+        'backendApi' => [
+            'class' => 'app\modules\backendApi\Module',
+        ],
+        'frontendApi' => [
+            'class' => 'app\modules\frontendApi\Module',
         ]
     ],
     'components' => [
@@ -58,6 +61,16 @@ $config = [
         'urlManager' => [
             'enablePrettyUrl' => true,
             'showScriptName' => false,
+            'rules' => [
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => [
+                        'frontendApi/post',
+                        'frontendApi/nav',
+                        'frontendApi/banner',
+                    ],
+                ],
+            ],
         ],
         'user' => [
             'identityClass' => 'app\models\User',
@@ -72,7 +85,7 @@ $config = [
 ];
 
 if (YII_ENV_DEV) {
-    $config['bootstrap'][] = 'debug';
+//    $config['bootstrap'][] = 'debug';
     $config['modules']['debug'] = [
         'class' => 'yii\debug\Module',
         'allowedIPs' => ['*'],
