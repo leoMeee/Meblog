@@ -1,0 +1,11 @@
+html body #main-wrapper, #main-wrapper > div {
+    height: 100%;
+}
+
+body{
+    background: #ececec;
+}
+
+#framework-wrapper {
+    height: 100%;
+}
