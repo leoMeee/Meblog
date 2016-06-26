@@ -70,6 +70,12 @@ $config = [
                         'frontendApi/banner',
                     ],
                 ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => [
+                        'backendApi/post',
+                    ],
+                ],
             ],
         ],
         'user' => [
