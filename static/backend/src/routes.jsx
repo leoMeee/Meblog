@@ -11,7 +11,7 @@ export default(
         <IndexRoute component={Dashboard}/>
         <Route path="posts" component={Post}>
             <IndexRoute component={PostList}/>
-            <Route path="edit/:id" component={PostEdit}/>
+            <Route path="edit(/:id)" component={PostEdit}/>
         </Route>
     </Route>
 )

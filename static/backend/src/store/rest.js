@@ -22,6 +22,17 @@ const rest = reduxApi({
             return state;
         }
     },
+    post: {
+        url: 'posts/:id',
+        crud: true,
+        reducer(state, action) {
+            initState(state, {
+                'title':'',
+                'content':'#标题'
+            });
+            return state;
+        }
+    }
 });
 
 function initState(state, data = {}) {

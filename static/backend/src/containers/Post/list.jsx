@@ -29,7 +29,7 @@ class Posts extends React.Component {
     }
 
     render() {
-        const {posts, dispatch} = this.props;
+        const {posts, dispatch, history} = this.props;
         const columns = [{
             title: '日志标题',
             dataIndex: 'title',
@@ -41,7 +41,7 @@ class Posts extends React.Component {
             key: 'created_at',
             width: '25%',
             sorter: true,
-            render:(text,record)=>(
+            render: (text, record)=>(
                 DateFormatter(text)
             )
         }, {
@@ -73,19 +73,24 @@ class Posts extends React.Component {
             pageSize: posts.data._meta.perPage,
         };
         return (
-            <Card title="日志列表" bordered={false}>
-                <div>
-                    <Table
-                        pagination={pagination}
-                        columns={columns}
-                        dataSource={posts.data.items}
-                        loading={posts.loading}
-                        rowKey={record => record.id}
-                        rowSelection={rowSelection}
-                        onChange={this.handleTableChange.bind(this)}
-                    />
-                </div>
-            </Card>
+            <Row>
+                <Col span="24">
+                    <Card title="日志列表" bordered={false}
+                          extra={<Button onClick={()=>(history.push('/posts/edit'))} type="primary" icon="edit">写日志</Button>}>
+                        <div>
+                            <Table
+                                pagination={pagination}
+                                columns={columns}
+                                dataSource={posts.data.items}
+                                loading={posts.loading}
+                                rowKey={record => record.id}
+                                rowSelection={rowSelection}
+                                onChange={this.handleTableChange.bind(this)}
+                            />
+                        </div>
+                    </Card>
+                </Col>
+            </Row>
 
         );
     }

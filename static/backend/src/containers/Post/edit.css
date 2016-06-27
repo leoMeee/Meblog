@@ -1,0 +1,32 @@
+.CodeMirror pre {
+    font-size: 16px;
+}
+
+.CodeMirror {
+    font-size: 16px;
+}
+
+.CodeMirror  .CodeMirror-scroll{
+    min-height: 500px;
+}
+
+.editor-preview, .editor-preview-side {
+    background: #ffffff;
+    padding: 20px;
+}
+
+.markdown-body > ul, ol {
+    list-style: disc;
+}
+
+.markdown-body hr {
+    height: 0;
+}
+
+.ant-btn {
+    margin-right: 8px;
+}
+
+.ant-back-top{
+    right:125px
+}
