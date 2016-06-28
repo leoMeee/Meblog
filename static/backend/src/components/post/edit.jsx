@@ -1,5 +1,5 @@
 import React from 'react';
-import {Row, Col, Table, Button, Card, Icon, Input, Tooltip, Tag}  from  'antd';
+import {Row, Col, Table, Button, Card, Icon, Input, Tooltip, Tag, message}  from  'antd';
 import 'simplemde/dist/simplemde.min.css';
 import 'github-markdown-css';
 import './../../components/post/edit.css';
@@ -8,6 +8,8 @@ import  SimpleMDE from 'simplemde/dist/simplemde.min';
 import hljs from '../../libs/react-highlight/lib'
 import '../../libs/react-highlight/highlight.css';
 import DateFormatter from '../../libs/DateFormatter';
+import MarkdownIt from 'markdown-it'
+import MarkdownItTitle from 'markdown-it-title'
 
 class Edit extends React.Component {
 
@@ -28,7 +30,19 @@ class Edit extends React.Component {
 
     saveContent(status) {
         let content = this.simplemde.value();
-        this.props.saveContent(content, status)
+        if (content.length < 1) {
+            message.error('日志内容不能为空!')
+        } else {
+            const md = new MarkdownIt({typographer: true});
+            md.use(MarkdownItTitle, 0);
+            let env = {};
+            md.render(content, env);
+            if (!env.title) {
+                message.error('日志标题格式不正确,请检查标题的 Markdown 语法!')
+            }else{
+                this.props.saveContent(env.title, content, status)
+            }
+        }
     }
 
     render() {

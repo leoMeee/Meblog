@@ -14,18 +14,16 @@ class Edit extends React.Component {
         }
     }
 
-    saveContent(content, status) {
-        const {dispatch, post} = this.props;
+    saveContent(title,content, status) {
+        const {dispatch,post} = this.props;
         dispatch(rest.actions.post.reset('sync'));
-        let body = {'Post[content]': content, 'Post[status]': status};
+        let body = {'Post[title]': title, 'Post[content]': content, 'Post[status]': status};
         let params = post.data.id ? {id: post.data.id} : {};
         let request = post.data.id ? rest.actions.post.put : rest.actions.post.post;
             dispatch(request(params, {body: body}, (err, data)=> {
             if (err == null) {
                 let successText = status == 2 ? '已成功发布' : '已成功存入草稿箱';
                 message.success(successText);
-            } else {
-                message.error('操作失败');
             }
         }));
     }

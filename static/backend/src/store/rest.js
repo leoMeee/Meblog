@@ -27,11 +27,12 @@ const rest = reduxApi({
         crud: true,
         reducer(state, action) {
             initState(state, {
+                title: '',
                 id: 0,
                 content: '# 标题',
                 status: 1,
-                created_at:0,
-                updated_at:0
+                created_at: 0,
+                updated_at: 0
             });
             return state;
         }

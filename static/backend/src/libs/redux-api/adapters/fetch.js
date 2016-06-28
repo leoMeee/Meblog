@@ -17,7 +17,7 @@ exports.default = function (fetch) {
             opts.body = data;
         }
         return fetch(url, opts).then(function (resp) {
-            return resp.status !== 204 ? resp.json() : {};
+            return resp.status == 200 ? resp.json() : {};
         });
     };
 };

@@ -11,7 +11,7 @@ class Post extends PostModel
     public function rules()
     {
         return [
-            [['content'], 'required'],
+            [['content','title'], 'required'],
             ['status', 'in', 'range' => [self::UNPUBLISHED, self::PUBLISHED, self::TRASH]],
         ];
     }
