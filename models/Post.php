@@ -40,7 +40,7 @@ class Post extends \yii\db\ActiveRecord
     public function rules()
     {
         return [
-            [['content', 'title'], 'required'],
+            [['content'], 'required'],
             ['status', 'in', 'range' => [self::UNPUBLISHED, self::PUBLISHED, self::TRASH]],
             [['title', 'tags'], 'string', 'max' => 255],
             [
@@ -114,9 +114,9 @@ class Post extends \yii\db\ActiveRecord
      */
     public function beforeSave($insert)
     {
-        if ($this->isNewRecord) {
-            $this->author_id = Yii::$app->user->id;
-        }
+//        if ($this->isNewRecord) {
+//            $this->author_id = Yii::$app->user->id;
+//        }
 
         $this->tags = Tag::tag2string(Tag::tag2array($this->tags));
 

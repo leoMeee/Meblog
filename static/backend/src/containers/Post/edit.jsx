@@ -1,96 +1,45 @@
 import React from 'react';
-import {Row, Col, Table, Button, Card, Icon, Input, Affix, BackTop}  from  'antd';
 import {connect} from  'react-redux';
 import rest from "../../store/rest";
-import 'simplemde/dist/simplemde.min.css';
-import 'github-markdown-css';
-import './edit.css';
-import {markdown} from 'markdown'
-import  SimpleMDE from 'simplemde/dist/simplemde.min';
-import hljs from '../../libs/react-highlight/lib'
-import '../../libs/react-highlight/highlight.css'
+import {message} from 'antd';
+import EditComponent from "../../components/post/edit";
 
 class Edit extends React.Component {
 
     constructor(props) {
         super(props);
-        this.simplemde = null;
-        this.state = {
-            previewActive: false
+        const {dispatch} = props;
+        if(props.params.id > 0){
+            dispatch(rest.actions.post.get({id:props.params.id}));
         }
     }
 
-    handlePreview() {
-        this.simplemde.togglePreview();
-        this.setState({
-            previewActive: !this.state.previewActive
-        })
+    saveContent(content, status) {
+        const {dispatch, post} = this.props;
+        dispatch(rest.actions.post.reset('sync'));
+        let body = {'Post[content]': content, 'Post[status]': status};
+        let params = post.data.id ? {id: post.data.id} : {};
+        let request = post.data.id ? rest.actions.post.put : rest.actions.post.post;
+            dispatch(request(params, {body: body}, (err, data)=> {
+            if (err == null) {
+                let successText = status == 2 ? '已成功发布' : '已成功存入草稿箱';
+                message.success(successText);
+            } else {
+                message.error('操作失败');
+            }
+        }));
     }
 
     render() {
-        const {post,history} = this.props;
+        const {post, history} = this.props;
         return (
-            <div>
-                <Row gutter={16}>
-                    <Col span="24">
-                        <Card title="写日志" extra={<Button onClick={()=>(history.push('/posts'))} type="primary">日志列表</Button>}>
-                            <textarea name="" id="editor" value={post.data.content}/>
-                        </Card>
-                    </Col>
-                </Row>
-                <Row style={{marginTop:15}}>
-                    <Col>
-                        <Card >
-                            <Button type="primary" size="large" icon="save">发布</Button>
-                            <Button size="large">存为草稿</Button>
-                        </Card>
-                    </Col>
-                </Row>
-                <div className="ant-back-top" style={{ bottom:  42}} onClick={this.handlePreview.bind(this)}>
-                    <Button type="primary" size="large">{this.state.previewActive ? '编辑' : '预览'}</Button>
-                </div>
-            </div>
+            <EditComponent post={post} history={history} saveContent={this.saveContent.bind(this)}/>
         )
     }
 
-    componentDidMount() {
-        this.simplemde = new SimpleMDE({
-            toolbar: [
-                "bold",
-                "italic",
-                "heading",
-                "|",
-                "quote",
-                "unordered-list",
-                "ordered-list",
-                "|",
-                "link",
-                "image",
-                "|",
-                "table",
-                "|",
-                "preview"
-
-            ],
-            parsingConfig: {
-                allowAtxHeaderWithoutSpace: true
-            },
-            spellChecker: false,
-            renderingConfig: {
-                codeSyntaxHighlighting:true
-            },
-            previewRender: function (text) {
-                var wrapper= document.createElement('div');
-                wrapper.innerHTML= '<div class="markdown-body">' + markdown.toHTML(text, 'Maruku') + '</div>';
-                var nodes = wrapper.querySelectorAll('pre code');
-                if (nodes.length > 0) {
-                    for (var i = 0; i < nodes.length; i = i + 1) {
-                        hljs.highlightBlock(nodes[i]);
-                    }
-                }
-                return wrapper.innerHTML;
-            }
-        });
+    componentWillUnmount() {
+        const {dispatch} = this.props;
+        dispatch(rest.actions.post.reset());
     }
 }
 

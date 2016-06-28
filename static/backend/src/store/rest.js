@@ -1,6 +1,6 @@
 import "isomorphic-fetch";
 import reduxApi, {transformers} from "redux-api";
-import adapterFetch from "redux-api/lib/adapters/fetch";
+import adapterFetch from "../libs/redux-api/adapters/fetch";
 
 
 const rest = reduxApi({
@@ -27,8 +27,11 @@ const rest = reduxApi({
         crud: true,
         reducer(state, action) {
             initState(state, {
-                'title':'',
-                'content':'#标题'
+                id: 0,
+                content: '# 标题',
+                status: 1,
+                created_at:0,
+                updated_at:0
             });
             return state;
         }

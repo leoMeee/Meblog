@@ -6,8 +6,8 @@
     font-size: 16px;
 }
 
-.CodeMirror  .CodeMirror-scroll{
-    min-height: 500px;
+.CodeMirror .CodeMirror-scroll {
+    min-height: 478px;
 }
 
 .editor-preview, .editor-preview-side {
@@ -27,6 +27,14 @@
     margin-right: 8px;
 }
 
-.ant-back-top{
-    right:125px
+.ant-back-top {
+    right: 125px
+}
+
+.save-time {
+    margin-left: 6px;
+    margin-top:5px;
+    background: #ffffff;
+    border: 0;
+    color:#959694;
 }

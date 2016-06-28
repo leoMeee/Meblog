@@ -3,6 +3,7 @@ import {Row, Col, Table, Button, Card, Icon}  from  'antd';
 import {connect} from  'react-redux';
 import rest from "../../store/rest";
 import DateFormatter from '../../libs/DateFormatter';
+import {Link} from 'react-router';
 
 
 class Posts extends React.Component {
@@ -50,7 +51,7 @@ class Posts extends React.Component {
             width: '15%',
             render: (text, record) => (
                 <span>
-                  <a href="#">修改</a>
+                    <Link to={'/posts/edit/'+record.id}>修改</Link>
                   <span className="ant-divider">&nbsp;</span>
                   <a href="#">删除</a>
                   <span className="ant-divider">&nbsp;</span>
