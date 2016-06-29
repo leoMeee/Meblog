@@ -68,12 +68,15 @@ $config = [
                         'frontendApi/post',
                         'frontendApi/nav',
                         'frontendApi/banner',
-                    ],
+                    ]
                 ],
                 [
                     'class' => 'yii\rest\UrlRule',
                     'controller' => [
                         'backendApi/post',
+                    ],
+                    'extraPatterns' => [
+                        'PATCH <id>/<attribute>/<attribute_value>' => 'update-attribute',
                     ],
                 ],
             ],

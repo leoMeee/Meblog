@@ -36,6 +36,13 @@ const rest = reduxApi({
             });
             return state;
         }
+    },
+    postStatus:{
+        url: 'posts/:id/status/:status',
+        virtual: true,
+        options: {
+            method: "PATCH"
+        }
     }
 });
 

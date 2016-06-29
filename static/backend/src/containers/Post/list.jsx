@@ -1,9 +1,11 @@
 import React from 'react';
-import {Row, Col, Table, Button, Card, Icon}  from  'antd';
+import {Row, Col, Table, Button, Card, Icon, Tag}  from  'antd';
 import {connect} from  'react-redux';
 import rest from "../../store/rest";
 import DateFormatter from '../../libs/DateFormatter';
+import * as PostConstants from '../../constants/PostConstants';
 import {Link} from 'react-router';
+import {message} from 'antd';
 
 
 class Posts extends React.Component {
@@ -11,21 +13,43 @@ class Posts extends React.Component {
 
     constructor(props) {
         super(props);
-        let {dispatch} = this.props;
-        dispatch(rest.actions.posts.reset('sync'));
-        dispatch(rest.actions.posts.sync({
-            fields: 'id,title,created_at'
-        }));
+        this.page = 1;
+        this.sort = null;
+        this.loadPosts();
     }
 
     handleTableChange(pagination, filters, sorter) {
+        if (sorter.order) {
+            this.sort = sorter.order == 'ascend' ? sorter.field : '-' + sorter.field;
+        }
+        this.page = pagination.current;
+        this.loadPosts();
+    }
+
+    handleUpdateStatus(id, status) {
         const {dispatch} = this.props;
-        let sort = sorter.order == 'ascend' ? sorter.field : '-' + sorter.field;
+        const loadPosts = this.loadPosts.bind(this);
+        switch (status) {
+            case PostConstants.STATUS_DRAFT:
+                status = PostConstants.STATUS_PUBLISHED;
+                break;
+            case PostConstants.STATUS_PUBLISHED:
+                status = PostConstants.STATUS_DRAFT;
+                break;
+        }
+        dispatch(rest.actions.postStatus.sync({id, status}))
+            .then(()=>message.success('操作成功'))
+            .then(function () {
+                loadPosts();
+            });
+    }
+
+    loadPosts() {
+        const {dispatch} = this.props;
         dispatch(rest.actions.posts.reset('sync'));
-        return dispatch(rest.actions.posts.sync({
-            page: pagination.current,
-            fields: 'id,title,created_at',
-            sort: sort
+        dispatch(rest.actions.posts.sync({
+            page: this.page,
+            sort: this.sort,
         }));
     }
 
@@ -35,15 +59,26 @@ class Posts extends React.Component {
             title: '日志标题',
             dataIndex: 'title',
             key: 'title',
-            width: '60%'
+            width: '50%'
         }, {
             title: '发布时间',
             dataIndex: 'created_at',
             key: 'created_at',
-            width: '25%',
+            width: '20%',
             sorter: true,
             render: (text, record)=>(
                 DateFormatter(text)
+            )
+        }, {
+            title: '状态',
+            dataIndex: 'status',
+            key: 'status',
+            width: '15%',
+            render: (text, record)=>(
+                <Tag
+                    color={record.status == PostConstants.STATUS_PUBLISHED ? 'green' : 'yellow'}>
+                    {record.status == PostConstants.STATUS_PUBLISHED ? '已发布' : '草稿箱'}
+                </Tag>
             )
         }, {
             title: '操作',
@@ -53,10 +88,12 @@ class Posts extends React.Component {
                 <span>
                     <Link to={'/posts/edit/'+record.id}>修改</Link>
                   <span className="ant-divider">&nbsp;</span>
-                  <a href="#">删除</a>
+                  <a onClick={this.handleUpdateStatus.bind(this,record.id,record.status)}>
+                      {record.status == PostConstants.STATUS_PUBLISHED ? '草稿箱' : '发布'}
+                  </a>
                   <span className="ant-divider">&nbsp;</span>
                 </span>
-            ),
+            )
         }];
         const rowSelection = {
             onChange(selectedRowKeys, selectedRows) {
