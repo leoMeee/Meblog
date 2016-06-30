@@ -1,11 +1,12 @@
 import React from 'react';
-import {Row, Col, Table, Button, Card, Icon, Tag}  from  'antd';
+import {Row, Col, Table, Button, Card, Icon, Tag, Alert, Select}  from  'antd';
 import {connect} from  'react-redux';
 import rest from "../../store/rest";
 import DateFormatter from '../../libs/DateFormatter';
 import * as PostConstants from '../../constants/PostConstants';
 import {Link} from 'react-router';
 import {message} from 'antd';
+import Search from '../../components/util/search'
 
 
 class Posts extends React.Component {
@@ -15,6 +16,9 @@ class Posts extends React.Component {
         super(props);
         this.page = 1;
         this.sort = null;
+        this.state = {
+            selectedRowKeys: []
+        };
         this.loadPosts();
     }
 
@@ -51,6 +55,30 @@ class Posts extends React.Component {
             page: this.page,
             sort: this.sort,
         }));
+    }
+
+    onSelectChange(selectedRowKeys) {
+        this.setState({selectedRowKeys});
+    }
+
+    onBatchDraft() {
+        const {dispatch} = this.props;
+        const loadPosts = this.loadPosts.bind(this);
+        const setState = this.setState.bind(this);
+        const selectedRowKeys = this.state.selectedRowKeys
+        const params = {};
+        for (let i = 0; i < selectedRowKeys.length; i++) {
+            params[selectedRowKeys[i]] = {"status": PostConstants.STATUS_DRAFT}
+        }
+        const body = {"data":JSON.stringify(params)};
+        dispatch(rest.actions.updatePostBatch.sync({}, {body}))
+            .then((response)=>message.success('成功更新了 '+response.success_ids.length+' 条数据'))
+            .then(function () {
+                loadPosts();
+                setState({
+                    selectedRowKeys: []
+                });
+            });
     }
 
     render() {
@@ -95,27 +123,40 @@ class Posts extends React.Component {
                 </span>
             )
         }];
+        const {selectedRowKeys} = this.state;
+        const hasSelected = selectedRowKeys.length > 0;
         const rowSelection = {
-            onChange(selectedRowKeys, selectedRows) {
-                console.log(`selectedRowKeys: ${selectedRowKeys}`, 'selectedRows: ', selectedRows);
-            },
-            onSelect(record, selected, selectedRows) {
-                console.log(record, selected, selectedRows);
-            },
-            onSelectAll(selected, selectedRows, changeRows) {
-                console.log(selected, selectedRows, changeRows);
-            },
+            selectedRowKeys,
+            onChange: this.onSelectChange.bind(this)
         };
         const pagination = {
             total: posts.data._meta.totalCount,
             pageSize: posts.data._meta.perPage,
         };
+
         return (
             <Row>
                 <Col span="24">
                     <Card title="日志列表" bordered={false}
                           extra={<Button onClick={()=>(history.push('/posts/edit'))} type="primary" icon="edit">写日志</Button>}>
                         <div>
+                            <Row style={{ marginBottom: 16 }}>
+                                <Col span={8}>
+                                    <Button type="primary" disabled={!hasSelected}
+                                            onClick={this.onBatchDraft.bind(this)}>存入草稿箱</Button>
+                                    <span
+                                        style={{ marginLeft: 8}}>{hasSelected ? `选择了 ${selectedRowKeys.length} 条数据` : ''}</span>
+                                </Col>
+                                <Col span={3} offset={9}>
+                                    <Select defaultValue="lucy">
+                                        <Option value="jack">草稿箱</Option>
+                                        <Option value="lucy">已发布</Option>
+                                    </Select>
+                                </Col>
+                                <Col span={4}>
+                                    <Search  />
+                                </Col>
+                            </Row>
                             <Table
                                 pagination={pagination}
                                 columns={columns}
@@ -125,6 +166,7 @@ class Posts extends React.Component {
                                 rowSelection={rowSelection}
                                 onChange={this.handleTableChange.bind(this)}
                             />
+
                         </div>
                     </Card>
                 </Col>

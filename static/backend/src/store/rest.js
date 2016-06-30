@@ -43,6 +43,13 @@ const rest = reduxApi({
         options: {
             method: "PATCH"
         }
+    },
+    updatePostBatch:{
+        url: 'posts/batch',
+        virtual: true,
+        options: {
+            method: "PUT"
+        }
     }
 });
 

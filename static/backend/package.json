@@ -12,6 +12,7 @@
   "license": "ISC",
   "dependencies": {
     "antd": "^1.6.1",
+    "classnames": "^2.2.5",
     "fecha": "^2.1.0",
     "font-awesome": "^4.6.3",
     "github-markdown-css": "^2.3.0",

@@ -26,7 +26,7 @@ class PostController extends BaseController
             [
                 'query' => Post::find()->select(['id', 'title', 'created_at', 'status']),
                 'pagination' => [
-                    'pageSize' => 10,
+                    'pageSize' => 9,
                 ],
                 'sort' => [
                     'defaultOrder' => [
@@ -104,6 +104,45 @@ class PostController extends BaseController
     }
 
     /**
+     * 批量删除日志
+     * @param $ids
+     * @return int
+     */
+    public function actionDeleteBatch($ids)
+    {
+        $ids = explode(',', $ids);
+        if (!is_array($ids)) {
+            Response::error('不合法的参数:ids');
+        }
+
+        return Post::deleteAll(['id' => $ids]);
+    }
+
+    /**
+     * 批量更新日志
+     * @return int
+     */
+    public function actionUpdateBatch()
+    {
+        $data = Yii::$app->request->post('data');
+        $data = json_decode($data, true);
+        if (!is_array($data)) {
+            Response::error('不合法的参数:data');
+        }
+        $success_ids = [];
+        $error_ids = [];
+        foreach ($data as $id => $item) {
+            if (($model = Post::findOne($id)) && $model->load($item, '') && $model->save()) {
+                $success_ids[] = $id;
+            }else{
+                $error_ids[] = $id;
+            }
+        }
+
+        return Response::success(compact('success_ids','error_ids'));
+    }
+
+    /**
      * 日志详情
      * @param $id
      * @return null|static
@@ -113,6 +152,7 @@ class PostController extends BaseController
     {
         return $this->findModel($id);
     }
+
 
     private function findModel($id)
     {
