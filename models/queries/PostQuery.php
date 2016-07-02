@@ -11,12 +11,4 @@ class PostQuery extends ActiveQuery
         return $this->andWhere(['status' => Post::PUBLISHED]);
     }
 
-    public function search($params)
-    {
-        $this->orderBy(['created_at' => SORT_DESC]);
-        $this->andFilterWhere(['like', 'title', isset($params['title']) ? $params['title'] : null]);
-        $this->andFilterWhere(['like', 'tags', isset($params['tag']) ? $params['tag'] : null]);
-
-        return $this;
-    }
 }

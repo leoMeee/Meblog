@@ -9,6 +9,7 @@ namespace app\modules\backendApi\controllers;
 
 use Yii;
 use app\modules\backendApi\models\Post;
+use app\models\searches\PostSearch;
 use yii\data\ActiveDataProvider;
 use yii\web\NotFoundHttpException;
 use app\helpers\Response;
@@ -22,21 +23,10 @@ class PostController extends BaseController
      */
     public function actionIndex()
     {
-        return new ActiveDataProvider(
-            [
-                'query' => Post::find()->select(['id', 'title', 'created_at', 'status']),
-                'pagination' => [
-                    'pageSize' => 9,
-                ],
-                'sort' => [
-                    'defaultOrder' => [
-                        'created_at' => SORT_DESC,
-                    ],
-                ],
+        $searchModel = new PostSearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
 
-            ]
-        );
-
+        return $dataProvider;
     }
 
     /**
@@ -134,12 +124,12 @@ class PostController extends BaseController
         foreach ($data as $id => $item) {
             if (($model = Post::findOne($id)) && $model->load($item, '') && $model->save()) {
                 $success_ids[] = $id;
-            }else{
+            } else {
                 $error_ids[] = $id;
             }
         }
 
-        return Response::success(compact('success_ids','error_ids'));
+        return Response::success(compact('success_ids', 'error_ids'));
     }
 
     /**

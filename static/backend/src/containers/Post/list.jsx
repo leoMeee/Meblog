@@ -1,24 +1,29 @@
 import React from 'react';
-import {Row, Col, Table, Button, Card, Icon, Tag, Alert, Select}  from  'antd';
+import {Row, Col, Table, Button, Card, Icon, Tag, Alert, Select, Form, Input}  from  'antd';
 import {connect} from  'react-redux';
 import rest from "../../store/rest";
 import DateFormatter from '../../libs/DateFormatter';
 import * as PostConstants from '../../constants/PostConstants';
 import {Link} from 'react-router';
 import {message} from 'antd';
-import Search from '../../components/util/search'
 
 
 class Posts extends React.Component {
-
 
     constructor(props) {
         super(props);
         this.page = 1;
         this.sort = null;
         this.state = {
-            selectedRowKeys: []
+            selectedRowKeys: [],
+            operation_loading: false,
+            filters: {
+                status: PostConstants.STATUS_PUBLISHED,
+                title: "",
+            },
+            shouldFilter: false
         };
+        this.timer = true;
         this.loadPosts();
     }
 
@@ -28,6 +33,13 @@ class Posts extends React.Component {
         }
         this.page = pagination.current;
         this.loadPosts();
+    }
+
+    componentDidUpdate(prevProps, prevState) {
+        if (this.state.shouldFilter === true) {
+            this.loadPosts();
+            this.setState({shouldFilter: false})
+        }
     }
 
     handleUpdateStatus(id, status) {
@@ -50,11 +62,12 @@ class Posts extends React.Component {
 
     loadPosts() {
         const {dispatch} = this.props;
-        dispatch(rest.actions.posts.reset('sync'));
-        dispatch(rest.actions.posts.sync({
+        const page_sort = {
             page: this.page,
             sort: this.sort,
-        }));
+        };
+        dispatch(rest.actions.posts.reset('sync'));
+        dispatch(rest.actions.posts.sync(Object.assign({}, this.state.filters, page_sort)));
     }
 
     onSelectChange(selectedRowKeys) {
@@ -70,15 +83,41 @@ class Posts extends React.Component {
         for (let i = 0; i < selectedRowKeys.length; i++) {
             params[selectedRowKeys[i]] = {"status": PostConstants.STATUS_DRAFT}
         }
-        const body = {"data":JSON.stringify(params)};
-        dispatch(rest.actions.updatePostBatch.sync({}, {body}))
-            .then((response)=>message.success('成功更新了 '+response.success_ids.length+' 条数据'))
-            .then(function () {
-                loadPosts();
-                setState({
-                    selectedRowKeys: []
+        const body = {"data": JSON.stringify(params)};
+        setState({
+            operation_loading: true
+        });
+        setTimeout(() => {
+            dispatch(rest.actions.updatePostBatch.sync({}, {body}))
+                .then((response)=>message.success('成功更新了 ' + response.success_ids.length + ' 条数据'))
+                .then(function () {
+                    loadPosts();
+                    setState({
+                        selectedRowKeys: [],
+                        operation_loading: false
+                    });
                 });
-            });
+        }, 500)
+
+    }
+
+    onFilterStatus(status) {
+        let state = this.state;
+        state.filters.status = status;
+        state.shouldFilter = true;
+        this.setState(state);
+    }
+
+    onFilterTitle(e) {
+        let state = this.state;
+        const setState = this.setState.bind(this);
+        state.filters.title = e.target.value;
+        this.setState(state);
+        clearTimeout(this.timer);
+        this.timer = setTimeout(function () {
+            state.shouldFilter = true;
+            setState(state);
+        }, 600);
     }
 
     render() {
@@ -123,7 +162,7 @@ class Posts extends React.Component {
                 </span>
             )
         }];
-        const {selectedRowKeys} = this.state;
+        const {selectedRowKeys, operation_loading} = this.state;
         const hasSelected = selectedRowKeys.length > 0;
         const rowSelection = {
             selectedRowKeys,
@@ -133,28 +172,36 @@ class Posts extends React.Component {
             total: posts.data._meta.totalCount,
             pageSize: posts.data._meta.perPage,
         };
-
+        const FormItem = Form.Item;
+        const Option = Select.Option
         return (
             <Row>
                 <Col span="24">
                     <Card title="日志列表" bordered={false}
                           extra={<Button onClick={()=>(history.push('/posts/edit'))} type="primary" icon="edit">写日志</Button>}>
                         <div>
-                            <Row style={{ marginBottom: 16 }}>
+                            <Row style={{ marginBottom: 16 }} gutter={14}>
                                 <Col span={8}>
                                     <Button type="primary" disabled={!hasSelected}
-                                            onClick={this.onBatchDraft.bind(this)}>存入草稿箱</Button>
+                                            onClick={this.onBatchDraft.bind(this)}
+                                            loading={operation_loading}>草稿箱</Button>
                                     <span
                                         style={{ marginLeft: 8}}>{hasSelected ? `选择了 ${selectedRowKeys.length} 条数据` : ''}</span>
                                 </Col>
-                                <Col span={3} offset={9}>
-                                    <Select defaultValue="lucy">
-                                        <Option value="jack">草稿箱</Option>
-                                        <Option value="lucy">已发布</Option>
-                                    </Select>
-                                </Col>
-                                <Col span={4}>
-                                    <Search  />
+                                <Col span={7} offset={9} style={{textAlign:'right'}}>
+                                    <Form inline>
+                                        <FormItem>
+                                            <Select onChange={this.onFilterStatus.bind(this)}
+                                                    defaultValue={this.state.filters.status}>
+                                                <Option value={PostConstants.STATUS_DRAFT}>草稿箱</Option>
+                                                <Option value={PostConstants.STATUS_PUBLISHED}>已发布</Option>
+                                            </Select>
+                                        </FormItem>
+                                        <FormItem>
+                                            <Input placeholder="搜索" value={this.state.filters.title}
+                                                   onChange={this.onFilterTitle.bind(this)}/>
+                                        </FormItem>
+                                    </Form>
                                 </Col>
                             </Row>
                             <Table

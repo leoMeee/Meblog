@@ -20,11 +20,9 @@ use yii\behaviors\TimestampBehavior;
  */
 class Post extends \yii\db\ActiveRecord
 {
-    const  UNPUBLISHED = 1; //未发布
-    const  PUBLISHED = 2;  //已发布
-    const  TRASH = 3;  //回收站
-
-    private $_oldTags;
+    const  STATUS_UNPUBLISHED = 1; //未发布
+    const  STATUS_PUBLISHED = 2;  //已发布
+    const  STATUS_TRASH = 3;  //回收站
 
     /**
      * @inheritdoc
@@ -41,14 +39,8 @@ class Post extends \yii\db\ActiveRecord
     {
         return [
             [['content'], 'required'],
-            ['status', 'in', 'range' => [self::UNPUBLISHED, self::PUBLISHED, self::TRASH]],
+            ['status', 'in', 'range' => [self::STATUS_UNPUBLISHED, self::STATUS_PUBLISHED, self::STATUS_TRASH]],
             [['title', 'tags'], 'string', 'max' => 255],
-            [
-                'tags',
-                'match',
-                'pattern' => '/^[a-zA-Z\s,]+$/',
-                'message' => '标签只能是字母+逗号隔开',
-            ],
         ];
     }
 
@@ -86,61 +78,5 @@ class Post extends \yii\db\ActiveRecord
     public static function find()
     {
         return new PostQuery(get_called_class());
-    }
-
-    /**
-     * 作者
-     * @return \yii\db\ActiveQuery
-     */
-    public function getAuthor()
-    {
-        return $this->hasOne(User::className(), ['id' => 'author_id']);
-    }
-
-
-    /**
-     * @inheritdoc
-     */
-    public function afterFind()
-    {
-        $this->_oldTags = $this->tags;
-
-        parent::afterFind();
-    }
-
-
-    /**
-     * @inheritdoc
-     */
-    public function beforeSave($insert)
-    {
-//        if ($this->isNewRecord) {
-//            $this->author_id = Yii::$app->user->id;
-//        }
-
-        $this->tags = Tag::tag2string(Tag::tag2array($this->tags));
-
-        return parent::beforeSave($insert);
-    }
-
-
-    /**
-     * @inheritdoc
-     */
-    public function afterSave($insert, $changedAttributes)
-    {
-        Tag::updateFrequency($this->_oldTags, $this->tags);
-
-        parent::afterSave($insert, $changedAttributes);
-    }
-
-    /**
-     * @inheritdoc
-     */
-    public function afterDelete()
-    {
-        Tag::removeTags(Tag::tag2array($this->tags));
-
-        parent::afterDelete();
     }
 }

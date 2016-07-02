@@ -15,9 +15,9 @@ class Post extends PostModel
     public function rules()
     {
         return [
-            [['content', 'title'], 'required','on'=>self::SCENARIO_CREATE],
-            [['content', 'title'], 'required','on'=>self::SCENARIO_UPDATE],
-            ['status', 'in', 'range' => self::statusRange()],
+            [['content', 'title'], 'required', 'on' => self::SCENARIO_CREATE],
+            [['content', 'title'], 'required', 'on' => self::SCENARIO_UPDATE],
+            ['status', 'in', 'range' => [self::STATUS_UNPUBLISHED, self::STATUS_PUBLISHED, self::STATUS_TRASH]],
         ];
     }
 
@@ -38,8 +38,4 @@ class Post extends PostModel
         return $fields;
     }
 
-    public static function statusRange()
-    {
-        return [self::UNPUBLISHED, self::PUBLISHED, self::TRASH];
-    }
 }
