@@ -1,6 +1,6 @@
 <?php
 
-namespace app\modules\backend;
+namespace app\modules\backendApi;
 
 class Module extends \yii\base\Module
 {

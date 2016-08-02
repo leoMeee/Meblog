@@ -1,0 +1,17 @@
+.layout-aside  #content-wrapper {
+    min-height: 100%;
+    padding: 80px 20px 0 177px;
+    transition: all 0.3s ease;
+    position: relative;
+    z-index: 1;
+}
+
+.layout-aside-collapse  #content-wrapper {
+    padding: 80px 20px 0 64px;
+    transition: all 0.3s ease;
+}
+
+.layout-aside .layout-content {
+    margin: 0px 8px;
+    padding: 24px;
+}

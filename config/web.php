@@ -12,7 +12,7 @@ $config = [
         ],
         'frontendApi' => [
             'class' => 'app\modules\frontendApi\Module',
-        ]
+        ],
     ],
     'components' => [
         'cache' => [
@@ -68,6 +68,17 @@ $config = [
                         'frontendApi/post',
                         'frontendApi/nav',
                         'frontendApi/banner',
+                    ],
+                ],
+                [
+                    'class' => 'yii\rest\UrlRule',
+                    'controller' => [
+                        'backendApi/post',
+                    ],
+                    'extraPatterns' => [
+                        'PATCH <id>/<attribute>/<attribute_value>' => 'update-attribute',
+                        'DELETE batch/<ids>' => 'delete-batch',
+                        'PUT batch' => 'update-batch',
                     ],
                 ],
             ],

@@ -1,18 +1,14 @@
 <?php
-/**
- * @link http://www.yiiframework.com/
- * @copyright Copyright (c) 2008 Yii Software LLC
- * @license http://www.yiiframework.com/license/
+/*
+ * 前台asset
+ * @author     wanglei@wyzc.com
+ * @created_at    16/6/17 下午9:33
  */
-
 namespace app\assets;
 
 use yii\web\AssetBundle;
 
-/**
- * @author Qiang Xue <qiang.xue@gmail.com>
- * @since 2.0
- */
+
 class AppAsset extends AssetBundle
 {
     public $sourcePath = "@app/static/frontend/dist";

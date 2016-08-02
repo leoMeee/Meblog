@@ -7,11 +7,11 @@ use yii\web\Controller;
 
 class BackendController extends Controller
 {
-
+    public $layout = false;
 
     public function actionIndex()
     {
-        echo 'backend';
+        return $this->render('index');
     }
 
 

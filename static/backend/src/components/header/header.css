@@ -1,0 +1,22 @@
+#header-wrapper {
+    height: 60px;
+    background: #404040;
+    top: 0;
+    left: 0;
+    position: fixed;
+    width: 100%;
+    /*box-shadow: 0 0 4px rgba(0, 0, 0, .14), 0 4px 8px rgba(0, 0, 0, .28);*/
+    box-sizing: border-box;
+    z-index: 3;
+}
+
+.header-logo {
+    display: inline-block;
+    margin: 15px 0 0 17px;
+    height: 33px;
+}
+
+.header-logo img {
+    vertical-align: top;
+    display: block;
+}

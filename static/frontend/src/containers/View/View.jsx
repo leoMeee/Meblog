@@ -36,7 +36,7 @@ class View extends React.Component {
     
     componentWillUnmount() {
         const {dispatch} = this.props;
-        dispatch(rest.actions.post.reset('sync'));
+        dispatch(rest.actions.post.reset());
     }
 
 }

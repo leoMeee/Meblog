@@ -1,9 +1,17 @@
 <?php
-namespace app\modules\backend\controllers;
+namespace app\modules\backendApi\controllers;
 
-use yii\web\Controller;
+use app\components\RestController;
 
-class BaseController extends Controller
+class BaseController extends RestController
 {
-    
+    public function fields()
+    {
+        $fields = parent::fields();
+
+        $fields['key'] = $fields['id'];
+
+        return $fields;
+
+    }
 }
