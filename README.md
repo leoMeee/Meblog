@@ -12,9 +12,9 @@ A blog base yii2+react
 
     cp docker-compose-example.yml docker-compose.yml
     cp .env-example .env
-    docker-compose up -d
-    docker-compose run --rm app ./yii migrate
-
+    docker-compose up -d 
+    docker-compose run --rm app ./yii migrate
+    
 ### 生成测试数据
 
     docker exec -ti meblog_app_1 ./yii fixture/load "*"
